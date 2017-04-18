@@ -6,10 +6,7 @@ type MorseSymbol =
     | Dot
     | Dash
     | Space
-
-type MorseCharacter =
-    MorseSymbol list
-
+    
 let ConvertCharToEnglishChar = function
     | 'A' | 'a' -> [Dot; Dash]
     | 'B' | 'b' -> [Dash; Dot; Dot; Dot]
@@ -41,15 +38,18 @@ let ConvertCharToEnglishChar = function
     | _ -> raise <| new ArgumentException("Invalid char")
 
 let ConvertStringToMorse str =
-    str |> List.ofSeq |> List.map ConvertCharToEnglishChar |> List.concat
+    str |> List.ofSeq |> List.collect ConvertCharToEnglishChar
 
 let ConvertMorseCharToString = function
     | Dot -> '.'
-    | Dash -> '_'
+    | Dash -> '-'
     | Space -> ' '
 
 let ConvertMorseListToString morse =
-    morse |> List.map ConvertMorseCharToString |> Seq.ofList |> string
+    morse |> List.map ConvertMorseCharToString |> List.toArray |> String
+
+let ConvertEnglishStringToMorseString x =
+    x |> ConvertStringToMorse |> ConvertMorseListToString
 
 
 

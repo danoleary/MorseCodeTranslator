@@ -14,32 +14,27 @@ open Fable.Helpers.React
 open Fable.Import.Browser
 open Translator
 
-type Model = {
-    MorseCharacters : string
-}
+type Model = string
 
-type Msg =
-    | CharEntered of string
+type Msg = | CharEntered of string
 
-let init () = {MorseCharacters = "";}
-
-
+let init () = ""
 
 let update msg model = 
     match msg with
     | CharEntered str -> 
-        {model with MorseCharacters = (str |> List.ofSeq |> List.map (fun x -> EnglishCharacter x))}
+        ConvertEnglishStringToMorseString str
 
 let view model dispatch =
-    R.div [ ] [
-        R.h1 [] [ R.str "Enter text to be converted to morse code" ]
+    R.div [ ClassName "row"] [
+        R.label [] [ R.str "Enter text to be converted to morse code" ]
         R.input [
-            ClassName "new-todo"
+            ClassName "form-control"
             Placeholder "What needs to be done?"
             OnChange (fun (ev:React.FormEvent) -> !!ev.target?value |> CharEntered |> dispatch)
         ]
         R.h2 [][
-            R.str ""
+            R.str model
         ]
     ]
 
